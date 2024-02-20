@@ -1,0 +1,24 @@
+name: Test pygame
+
+on: [push]
+
+jobs:
+  build-macos:
+    runs-on: macos-13
+    strategy:
+      max-parallel: 5
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: mamba-org/setup-micromamba@v1
+      with:
+        # the create command looks like this:
+        # `micromamba create -n test-env python=3.10 numpy`
+        environment-name: test-env
+        create-args: >-
+          python=3.10
+          pygame
+
+    - name: Import numpy in micromamba environment (bash)
+      run: python -c "from pygame.base import *"
+      shell: bash -el {0}
